@@ -7,25 +7,66 @@ namespace CheckoutLab.Api.Controllers;
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
+    // In-memory fake database
+    private static List<Product> products = new List<Product>
+    {
+        new Product
+        {
+            Id = 1,
+            Name = "Keyboard",
+            Price = 49.99m
+        },
+        new Product
+        {
+            Id = 2,
+            Name = "Mouse",
+            Price = 29.99m
+        }
+    };
+
+    // GET: /api/products
     [HttpGet]
     public IActionResult GetAll()
     {
-        var products = new List<Product>
-        {
-            new Product
-            {
-                Id = 1,
-                Name = "Keyboard",
-                Price = 49.99m
-            },
-            new Product
-            {
-                Id = 2,
-                Name = "Mouse",
-                Price = 29.99m
-            }
-        };
-
         return Ok(products);
+    }
+
+    // GET: /api/products/1
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var product = products.FirstOrDefault(p => p.Id == id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
+    }
+
+    // POST: /api/products
+    [HttpPost]
+    public IActionResult Create(Product product)
+    {
+        products.Add(product);
+
+        return Ok(product);
+    }
+
+    // DELETE: /api/products/1
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var product = products.FirstOrDefault(p => p.Id == id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        products.Remove(product);
+
+        return Ok(product);
     }
 }
