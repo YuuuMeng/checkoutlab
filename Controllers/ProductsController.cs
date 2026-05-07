@@ -69,4 +69,20 @@ public class ProductsController : ControllerBase
 
         return Ok(product);
     }
+
+    [HttpPut("{id}")]
+public IActionResult Update(int id, Product updatedProduct)
+{
+    var product = products.FirstOrDefault(p => p.Id == id);
+
+    if (product == null)
+    {
+        return NotFound();
+    }
+
+    product.Name = updatedProduct.Name;
+    product.Price = updatedProduct.Price;
+
+    return Ok(product);
+}
 }
